@@ -1,0 +1,491 @@
+{
+  "dataset_name": "AT2018cow Frontier-Science LLM Benchmark",
+  "version": "1.0.0",
+  "description": "Seven-dimension benchmark for evaluating frontier-science reasoning in LLMs using AT2018cow as a motivating astrophysical case.",
+  "dimensions": [
+    {
+      "id": "D1",
+      "name": "Literature Discovery",
+      "raw_range": [
+        0,
+        5
+      ],
+      "purpose": "Evaluate whether an AI system can identify essential scientific literature relevant to a frontier research question.",
+      "task_design": {
+        "input": "Natural-language research question about AT2018cow X-ray periodic or quasi-periodic behavior.",
+        "expected_output": "A list of key references with a brief explanation of relevance. References should not be hallucinated.",
+        "anchor_assisted_second_round": "If first answer is incomplete, provide Margutti et al. or Kuin et al. as an anchor and ask for the missing key reference."
+      },
+      "gold_references": {
+        "essential_level_A": [
+          {
+            "name": "Margutti et al. 2019",
+            "role": "Key AT2018cow multiwavelength/X-ray reference."
+          },
+          {
+            "name": "Kuin et al. 2019",
+            "role": "Directly connected to X-ray periodic/quasi-periodic behavior."
+          }
+        ],
+        "optional_level_B": "Other AT2018cow studies or LFBOT literature providing context.",
+        "incorrect": "Hallucinated papers, unrelated studies, or misattributed references."
+      },
+      "scoring": {
+        "raw_score": "0-5",
+        "score_mapping": {
+          "0": "0%",
+          "1": "20%",
+          "2": "40%",
+          "3": "60%",
+          "4": "80%",
+          "5": "100%"
+        },
+        "details": {
+          "5": "Both essential references identified in first-pass answer with correct relevance.",
+          "4": "Both essential references identified after anchor-assisted prompt.",
+          "3": "One essential reference identified with correct relevance.",
+          "2": "One essential reference identified.",
+          "1": "Broadly relevant AT2018cow literature only.",
+          "0": "No relevant reference or hallucinated answer."
+        },
+        "rescoring": "Percentage Score = Raw Score / 5 * 100",
+        "hallucination_penalty": {
+          "fake_reference": -1,
+          "wrong_relevance": -0.5,
+          "fake_scientific_claim": -2
+        }
+      },
+      "evaluation_metrics": [
+        "Reference Recall",
+        "Reference Precision",
+        "Relevance Grounding",
+        "Iterative Discovery"
+      ],
+      "example": {
+        "id": "AT2018COW-D1-001",
+        "dimension": "literature_discovery",
+        "topic": "AT2018cow X-ray periodicity",
+        "question_round_1": "Which papers are most directly relevant to the reported X-ray periodicity or quasi-periodic behavior of AT2018cow?",
+        "essential_references": [
+          {
+            "name": "Margutti et al.",
+            "role": "Key AT2018cow multiwavelength/X-ray reference."
+          },
+          {
+            "name": "Kuin et al.",
+            "role": "Directly associated with periodic/quasi-periodic behavior."
+          }
+        ],
+        "round_2_prompt_if_missing_margutti": "One relevant paper is Kuin et al. Can you identify another key reference?",
+        "round_2_prompt_if_missing_kuin": "One relevant paper is Margutti et al. Can you identify another key reference?"
+      }
+    },
+    {
+      "id": "D2",
+      "name": "Literature Synthesis",
+      "raw_range": [
+        0,
+        10
+      ],
+      "purpose": "Evaluate whether an AI system can synthesize multiple scientific papers into a coherent research landscape.",
+      "task_design": {
+        "input": "Excerpts from multiple papers on AT2018cow and LFBOT interpretations.",
+        "expected_output": [
+          "Background/observational facts",
+          "Author interpretations",
+          "Evidence supporting each interpretation",
+          "Points of agreement/disagreement",
+          "Overall trend if any",
+          "Remaining uncertainty"
+        ],
+        "constraint": "No hallucinations; do not assert a definitive origin unless fully supported by excerpts."
+      },
+      "papers": [
+        {
+          "paper": "Tsuna & Lu 2025",
+          "role": "accretion/TDE interpretation"
+        },
+        {
+          "paper": "Metzger 2022",
+          "role": "peculiar SN / Type Ibn-IIn or WR-BH merger interpretation"
+        },
+        {
+          "paper": "Margutti et al. 2019",
+          "role": "multiwavelength/X-ray evidence"
+        },
+        {
+          "paper": "Kuin et al. 2019",
+          "role": "Swift spectra / TDE interpretation"
+        }
+      ],
+      "scoring": {
+        "raw_score": "0-10",
+        "score_mapping": {
+          "0-2": "0%",
+          "3-4": "25%",
+          "5-6": "50%",
+          "7-8": "75%",
+          "9-10": "100%"
+        },
+        "rubric": {
+          "viewpoint_coverage": 2,
+          "evidence_mapping": 2,
+          "fact_interpretation_separation": 2,
+          "balanced_trend_judgment": 2,
+          "hallucination_control": 2
+        },
+        "rescoring": "Percentage Score = Raw Score / 10 * 100",
+        "hallucination_cap_rules": {
+          "major_false_consensus_claim": "max 50%",
+          "invented_paper_or_evidence": "max 50%",
+          "unsupported_definitive_origin_claim": "max 50%",
+          "mostly_hallucinated_answer": "0%"
+        }
+      },
+      "evaluation_metrics": [
+        "Viewpoint Coverage",
+        "Evidence-to-View Mapping",
+        "Fact vs Interpretation Separation",
+        "Balanced Trend Judgment",
+        "Hallucination Control"
+      ],
+      "example": {
+        "id": "AT2018COW-D2-001",
+        "dimension": "literature_synthesis",
+        "topic": "AT2018cow origin and interpretation",
+        "input_type": "provided_paper_excerpts",
+        "prompt": "Synthesize the research landscape. Separate background facts, evidence, interpretations, and trend. Do not assert a final conclusion unless supported."
+      }
+    },
+    {
+      "id": "D3",
+      "name": "Claim Verification",
+      "raw_range": [
+        0,
+        5
+      ],
+      "purpose": "Evaluate whether an AI system can verify a specific scientific claim against provided evidence.",
+      "label_set": [
+        "supported",
+        "contradicted",
+        "partially_supported",
+        "overclaimed",
+        "insufficient_evidence",
+        "plausible_but_unverified"
+      ],
+      "task_design": {
+        "input": "A single scientific claim with relevant evidence excerpts.",
+        "expected_output": [
+          "Label assignment",
+          "Evidence used",
+          "Reasoning connecting evidence to label",
+          "Uncertainty assessment"
+        ],
+        "constraint": "Avoid hallucinations; do not assert definitive conclusions if evidence is insufficient."
+      },
+      "scoring": {
+        "raw_score": "0-5",
+        "score_mapping": {
+          "0": "0%",
+          "1": "20%",
+          "2": "40%",
+          "3": "60%",
+          "4": "80%",
+          "5": "100%"
+        },
+        "rescoring": "Percentage Score = Raw Score / 5 * 100",
+        "details": {
+          "5": "Correct label, appropriate evidence selection, sound reasoning, uncertainty/overclaim detection, no hallucinations.",
+          "3-4": "Minor errors in evidence mapping or reasoning.",
+          "1-2": "Incorrect label or reasoning, minor hallucinations.",
+          "0": "Largely hallucinated claim evaluation or false label."
+        },
+        "hallucination_penalty": {
+          "invented_evidence": -2,
+          "incorrect_evidence": -1
+        }
+      },
+      "evaluation_metrics": [
+        "Correct Label",
+        "Evidence Mapping",
+        "Reasoning Quality",
+        "Overclaim/Uncertainty Detection",
+        "Hallucination Control"
+      ],
+      "example": {
+        "id": "AT2018COW-D3-001",
+        "dimension": "claim_verification",
+        "topic": "AT2018cow origin",
+        "claim": "AT2018cow is conclusively established as a tidal disruption event.",
+        "allowed_labels": [
+          "supported",
+          "contradicted",
+          "partially_supported",
+          "overclaimed",
+          "insufficient_evidence",
+          "plausible_but_unverified"
+        ],
+        "gold_label": "overclaimed",
+        "accepted_labels": [
+          "overclaimed",
+          "insufficient_evidence"
+        ],
+        "gold_reasoning_points": [
+          "Evidence includes TDE-like interpretations.",
+          "Evidence also includes competing SN/CSM and merger interpretations.",
+          "Literature does not establish a final consensus.",
+          "The word 'conclusively' overreaches the evidence."
+        ]
+      }
+    },
+    {
+      "id": "D4",
+      "name": "Hypothesis Discrimination",
+      "raw_range": [
+        0,
+        10
+      ],
+      "purpose": "Evaluate whether an AI system can compare competing scientific hypotheses and determine which evidence supports or contradicts each one.",
+      "task_design": {
+        "input": "A set of hypotheses and evidence excerpts.",
+        "hypotheses": [
+          "TDE/accretion-powered central engine",
+          "Peculiar supernova (Type Ibn/IIn)",
+          "Wolf-Rayet\u2013Black-Hole merger"
+        ],
+        "expected_output": [
+          "Supporting evidence",
+          "Contradictory evidence",
+          "Discriminating observations",
+          "Remaining uncertainties"
+        ],
+        "constraint": "Do not invent evidence; distinguish fact from interpretation; avoid overclaiming."
+      },
+      "scoring": {
+        "raw_score": "0-10",
+        "score_mapping": {
+          "0-2": "0%",
+          "3-4": "25%",
+          "5-6": "50%",
+          "7-8": "75%",
+          "9-10": "100%"
+        },
+        "rubric": {
+          "correct_hypotheses": 2,
+          "evidence_mapping": 3,
+          "discriminating_evidence": 2,
+          "uncertainty": 2,
+          "no_hallucination": 1
+        },
+        "rescoring": "Percentage Score = Raw Score / 10 * 100",
+        "hallucination_cap_rules": {
+          "invented_hypotheses": "0%",
+          "evidence_mismatch": "max 50%",
+          "unsupported_final_claim": "max 50%"
+        }
+      },
+      "evaluation_metrics": [
+        "Correct Hypotheses Mapping",
+        "Discriminating Evidence Identification",
+        "Uncertainty Handling",
+        "Avoidance of Hallucinations"
+      ],
+      "example": {
+        "id": "AT2018COW-D4-001",
+        "dimension": "hypothesis_discrimination",
+        "topic": "AT2018cow origin",
+        "prompt": "Map evidence to each hypothesis, identify supporting and contradictory evidence, discriminating observations, and unresolved uncertainties. Avoid hallucination."
+      }
+    },
+    {
+      "id": "D5",
+      "name": "Formal Scientific Reasoning",
+      "raw_range": [
+        0,
+        10
+      ],
+      "purpose": "Evaluate quantitative, physical, or formal reasoning in the context of frontier scientific questions.",
+      "task_design": {
+        "input": {
+          "qpo_period_s": 224,
+          "xray_luminosity_erg_s": 1e+43,
+          "black_hole_mass_range_solar": [
+            1000.0,
+            100000.0
+          ]
+        },
+        "expected_output": [
+          "Calculation steps",
+          "Assumptions",
+          "Numerical answer / estimate",
+          "Scientific interpretation",
+          "Uncertainty or caveats"
+        ],
+        "task_types": [
+          "Timescale checks",
+          "Energy/luminosity budgets",
+          "Mass/radius constraints",
+          "Order-of-magnitude reasoning",
+          "Numerical comparison of hypotheses"
+        ]
+      },
+      "scoring": {
+        "raw_score": "0-10",
+        "score_mapping": {
+          "0-2": "0%",
+          "3-4": "25%",
+          "5-6": "50%",
+          "7-8": "75%",
+          "9-10": "100%"
+        },
+        "rubric": {
+          "correct_formula_selection": 2,
+          "correct_numerical_computation": 2,
+          "correct_units": 1,
+          "plausible_assumptions": 2,
+          "scientific_interpretation": 2,
+          "uncertainty_caveats": 1
+        },
+        "rescoring": "Percentage Score = Raw Score / 10 * 100",
+        "hallucination_cap_rules": {
+          "invented_numbers_or_constants": "max 50%",
+          "misapplied_equations_or_units": "max 50%",
+          "physically_impossible_reasoning": "0%"
+        }
+      },
+      "evaluation_metrics": [
+        "Formula Selection",
+        "Numerical Computation",
+        "Units",
+        "Assumptions",
+        "Scientific Interpretation",
+        "Caveats"
+      ],
+      "example": {
+        "id": "AT2018COW-D5-001",
+        "dimension": "formal_scientific_reasoning",
+        "topic": "AT2018cow compact-object plausibility",
+        "question": "Estimate characteristic orbital radius for the QPO, assess timescale consistency, and check if X-ray luminosity is physically plausible."
+      }
+    },
+    {
+      "id": "D6",
+      "name": "Hypothesis Generation",
+      "raw_range": [
+        0,
+        10
+      ],
+      "purpose": "Evaluate whether an AI system can generate plausible, testable scientific hypotheses given evidence and uncertainty.",
+      "task_design": {
+        "input": "Evidence excerpts from multiple papers or observations related to a frontier scientific problem.",
+        "expected_output": [
+          "Supporting evidence for each hypothesis",
+          "Weaknesses or uncertainties",
+          "One falsifiable prediction for each hypothesis"
+        ],
+        "constraint": "Hypotheses must be physically plausible, grounded in evidence, and not invent unsupported claims."
+      },
+      "scoring": {
+        "raw_score": "0-10",
+        "score_mapping": {
+          "0-2": "0%",
+          "3-4": "25%",
+          "5-6": "50%",
+          "7-8": "75%",
+          "9-10": "100%"
+        },
+        "rubric": {
+          "physical_plausibility": 2,
+          "evidence_grounding": 2,
+          "novelty_non_triviality": 2,
+          "states_weaknesses": 1,
+          "falsifiable_prediction": 2,
+          "no_hallucination": 1
+        },
+        "rescoring": "Percentage Score = Raw Score / 10 * 100",
+        "hallucination_cap_rules": {
+          "invented_evidence": "max 50%",
+          "physically_impossible_hypothesis": "0%",
+          "unsupported_overclaim": "max 50%"
+        }
+      },
+      "evaluation_metrics": [
+        "Physical Plausibility",
+        "Evidence Grounding",
+        "Novelty / Non-triviality",
+        "Weaknesses",
+        "Falsifiable Prediction",
+        "Hallucination Control"
+      ],
+      "example": {
+        "id": "AT2018COW-D6-001",
+        "dimension": "hypothesis_generation",
+        "topic": "AT2018cow origin",
+        "task_prompt": "Generate 2-3 plausible scientific hypotheses explaining AT2018cow's optical and X-ray behavior. Include supporting evidence, weaknesses, and one falsifiable prediction for each. Avoid invented evidence."
+      }
+    },
+    {
+      "id": "D7",
+      "name": "Frontier Open Question",
+      "raw_range": [
+        0,
+        10
+      ],
+      "purpose": "Evaluate reasoning on real frontier scientific problems that combine multiple observational modalities, sparse data, and quantitative inference.",
+      "task_design": {
+        "input": {
+          "xray_period_days": 4,
+          "optical_period_days": 4
+        },
+        "expected_output": [
+          "X-ray periodicity explanation",
+          "Optical periodicity explanation",
+          "Synchronization assessment",
+          "Physical inference",
+          "Quantification",
+          "Caveats/uncertainties"
+        ],
+        "constraint": "Avoid invented observations; provide physically plausible interpretations; indicate uncertainties."
+      },
+      "scoring": {
+        "raw_score": "0-10",
+        "score_mapping": {
+          "0-2": "0%",
+          "3-4": "25%",
+          "5-6": "50%",
+          "7-8": "75%",
+          "9-10": "100%"
+        },
+        "rubric": {
+          "xray_periodicity_explanation": 2,
+          "optical_periodicity_explanation": 2,
+          "synchronization": 2,
+          "physical_inference": 2,
+          "quantification": 1,
+          "uncertainty_handling": 1
+        },
+        "rescoring": "Percentage Score = Raw Score / 10 * 100",
+        "hallucination_cap_rules": {
+          "invented_observations": "max 50%",
+          "physically_impossible_interpretation": "0%",
+          "unsupported_mass_estimate": "max 50%"
+        }
+      },
+      "evaluation_metrics": [
+        "X-ray Periodicity Explanation",
+        "Optical Periodicity Explanation",
+        "Synchronization Assessment",
+        "Physical Inference",
+        "Quantitative Reasoning",
+        "Uncertainty Handling",
+        "Hallucination Control"
+      ],
+      "example": {
+        "id": "AT2018COW-D7-001",
+        "dimension": "frontier_open_question",
+        "topic": "AT2018cow 4-day X-ray/optical periodicity",
+        "task_prompt": "Explain X-ray and optical 4-day periodicity, assess synchronization, infer object type, quantify mass/size if possible, and provide caveats."
+      }
+    }
+  ]
+}

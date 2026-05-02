@@ -1,0 +1,102 @@
+{
+  "metadata": {
+    "model_name": "",
+    "model_version": "",
+    "date": "",
+    "evaluator": "",
+    "notes": ""
+  },
+  "responses": {
+    "D1": {
+      "raw_score": 0,
+      "max_raw_score": 5,
+      "response_text": "",
+      "flags": {
+        "hallucination": false,
+        "invented_evidence": false,
+        "physically_impossible": false,
+        "unsupported_overclaim": false,
+        "evidence_mismatch": false
+      },
+      "evaluator_notes": ""
+    },
+    "D2": {
+      "raw_score": 0,
+      "max_raw_score": 10,
+      "response_text": "",
+      "flags": {
+        "hallucination": false,
+        "invented_evidence": false,
+        "physically_impossible": false,
+        "unsupported_overclaim": false,
+        "evidence_mismatch": false
+      },
+      "evaluator_notes": ""
+    },
+    "D3": {
+      "raw_score": 0,
+      "max_raw_score": 5,
+      "response_text": "",
+      "flags": {
+        "hallucination": false,
+        "invented_evidence": false,
+        "physically_impossible": false,
+        "unsupported_overclaim": false,
+        "evidence_mismatch": false
+      },
+      "evaluator_notes": ""
+    },
+    "D4": {
+      "raw_score": 0,
+      "max_raw_score": 10,
+      "response_text": "",
+      "flags": {
+        "hallucination": false,
+        "invented_evidence": false,
+        "physically_impossible": false,
+        "unsupported_overclaim": false,
+        "evidence_mismatch": false
+      },
+      "evaluator_notes": ""
+    },
+    "D5": {
+      "raw_score": 0,
+      "max_raw_score": 10,
+      "response_text": "",
+      "flags": {
+        "hallucination": false,
+        "invented_evidence": false,
+        "physically_impossible": false,
+        "unsupported_overclaim": false,
+        "evidence_mismatch": false
+      },
+      "evaluator_notes": ""
+    },
+    "D6": {
+      "raw_score": 0,
+      "max_raw_score": 10,
+      "response_text": "",
+      "flags": {
+        "hallucination": false,
+        "invented_evidence": false,
+        "physically_impossible": false,
+        "unsupported_overclaim": false,
+        "evidence_mismatch": false
+      },
+      "evaluator_notes": ""
+    },
+    "D7": {
+      "raw_score": 0,
+      "max_raw_score": 10,
+      "response_text": "",
+      "flags": {
+        "hallucination": false,
+        "invented_evidence": false,
+        "physically_impossible": false,
+        "unsupported_overclaim": false,
+        "evidence_mismatch": false
+      },
+      "evaluator_notes": ""
+    }
+  }
+}

@@ -1,0 +1,7 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+This benchmark package may be shared and adapted with appropriate attribution.
+
+Note: This package contains benchmark prompts, scoring rubrics, metadata, and evaluation scripts.
+It does not redistribute copyrighted paper texts. Users should obtain source literature from publishers,
+arXiv, ADS, or other lawful sources according to their licenses.

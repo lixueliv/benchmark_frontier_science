@@ -1,0 +1,176 @@
+{
+  "global_scoring_notes": [
+    "Each dimension is scored independently.",
+    "Raw scores are converted to percentages according to dimension-specific maximum raw scores.",
+    "Hallucination cap rules override otherwise high raw scores.",
+    "Expert review is recommended for final scoring in frontier scientific questions."
+  ],
+  "dimensions": {
+    "D1": {
+      "raw_score": "0-5",
+      "score_mapping": {
+        "0": "0%",
+        "1": "20%",
+        "2": "40%",
+        "3": "60%",
+        "4": "80%",
+        "5": "100%"
+      },
+      "details": {
+        "5": "Both essential references identified in first-pass answer with correct relevance.",
+        "4": "Both essential references identified after anchor-assisted prompt.",
+        "3": "One essential reference identified with correct relevance.",
+        "2": "One essential reference identified.",
+        "1": "Broadly relevant AT2018cow literature only.",
+        "0": "No relevant reference or hallucinated answer."
+      },
+      "rescoring": "Percentage Score = Raw Score / 5 * 100",
+      "hallucination_penalty": {
+        "fake_reference": -1,
+        "wrong_relevance": -0.5,
+        "fake_scientific_claim": -2
+      }
+    },
+    "D2": {
+      "raw_score": "0-10",
+      "score_mapping": {
+        "0-2": "0%",
+        "3-4": "25%",
+        "5-6": "50%",
+        "7-8": "75%",
+        "9-10": "100%"
+      },
+      "rubric": {
+        "viewpoint_coverage": 2,
+        "evidence_mapping": 2,
+        "fact_interpretation_separation": 2,
+        "balanced_trend_judgment": 2,
+        "hallucination_control": 2
+      },
+      "rescoring": "Percentage Score = Raw Score / 10 * 100",
+      "hallucination_cap_rules": {
+        "major_false_consensus_claim": "max 50%",
+        "invented_paper_or_evidence": "max 50%",
+        "unsupported_definitive_origin_claim": "max 50%",
+        "mostly_hallucinated_answer": "0%"
+      }
+    },
+    "D3": {
+      "raw_score": "0-5",
+      "score_mapping": {
+        "0": "0%",
+        "1": "20%",
+        "2": "40%",
+        "3": "60%",
+        "4": "80%",
+        "5": "100%"
+      },
+      "rescoring": "Percentage Score = Raw Score / 5 * 100",
+      "details": {
+        "5": "Correct label, appropriate evidence selection, sound reasoning, uncertainty/overclaim detection, no hallucinations.",
+        "3-4": "Minor errors in evidence mapping or reasoning.",
+        "1-2": "Incorrect label or reasoning, minor hallucinations.",
+        "0": "Largely hallucinated claim evaluation or false label."
+      },
+      "hallucination_penalty": {
+        "invented_evidence": -2,
+        "incorrect_evidence": -1
+      }
+    },
+    "D4": {
+      "raw_score": "0-10",
+      "score_mapping": {
+        "0-2": "0%",
+        "3-4": "25%",
+        "5-6": "50%",
+        "7-8": "75%",
+        "9-10": "100%"
+      },
+      "rubric": {
+        "correct_hypotheses": 2,
+        "evidence_mapping": 3,
+        "discriminating_evidence": 2,
+        "uncertainty": 2,
+        "no_hallucination": 1
+      },
+      "rescoring": "Percentage Score = Raw Score / 10 * 100",
+      "hallucination_cap_rules": {
+        "invented_hypotheses": "0%",
+        "evidence_mismatch": "max 50%",
+        "unsupported_final_claim": "max 50%"
+      }
+    },
+    "D5": {
+      "raw_score": "0-10",
+      "score_mapping": {
+        "0-2": "0%",
+        "3-4": "25%",
+        "5-6": "50%",
+        "7-8": "75%",
+        "9-10": "100%"
+      },
+      "rubric": {
+        "correct_formula_selection": 2,
+        "correct_numerical_computation": 2,
+        "correct_units": 1,
+        "plausible_assumptions": 2,
+        "scientific_interpretation": 2,
+        "uncertainty_caveats": 1
+      },
+      "rescoring": "Percentage Score = Raw Score / 10 * 100",
+      "hallucination_cap_rules": {
+        "invented_numbers_or_constants": "max 50%",
+        "misapplied_equations_or_units": "max 50%",
+        "physically_impossible_reasoning": "0%"
+      }
+    },
+    "D6": {
+      "raw_score": "0-10",
+      "score_mapping": {
+        "0-2": "0%",
+        "3-4": "25%",
+        "5-6": "50%",
+        "7-8": "75%",
+        "9-10": "100%"
+      },
+      "rubric": {
+        "physical_plausibility": 2,
+        "evidence_grounding": 2,
+        "novelty_non_triviality": 2,
+        "states_weaknesses": 1,
+        "falsifiable_prediction": 2,
+        "no_hallucination": 1
+      },
+      "rescoring": "Percentage Score = Raw Score / 10 * 100",
+      "hallucination_cap_rules": {
+        "invented_evidence": "max 50%",
+        "physically_impossible_hypothesis": "0%",
+        "unsupported_overclaim": "max 50%"
+      }
+    },
+    "D7": {
+      "raw_score": "0-10",
+      "score_mapping": {
+        "0-2": "0%",
+        "3-4": "25%",
+        "5-6": "50%",
+        "7-8": "75%",
+        "9-10": "100%"
+      },
+      "rubric": {
+        "xray_periodicity_explanation": 2,
+        "optical_periodicity_explanation": 2,
+        "synchronization": 2,
+        "physical_inference": 2,
+        "quantification": 1,
+        "uncertainty_handling": 1
+      },
+      "rescoring": "Percentage Score = Raw Score / 10 * 100",
+      "hallucination_cap_rules": {
+        "invented_observations": "max 50%",
+        "physically_impossible_interpretation": "0%",
+        "unsupported_mass_estimate": "max 50%"
+      }
+    }
+  }
+}

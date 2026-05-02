@@ -1,0 +1,9 @@
+{
+  "D1": "Full credit requires Margutti et al. and Kuin et al. with correct relevance to AT2018cow X-ray/periodicity behavior.",
+  "D2": "Full credit requires coverage of TDE/accretion, peculiar SN/CSM, LFBOT/WR-BH merger, environmental constraints, fact-interpretation separation, trend judgment, and uncertainty.",
+  "D3": "Gold label for the example claim is 'overclaimed'; accepted labels include 'overclaimed' and 'insufficient_evidence' with correct reasoning.",
+  "D4": "Full credit requires correct evidence mapping across TDE/accretion, peculiar SN, and WR-BH merger hypotheses, with discriminants and unresolved uncertainty.",
+  "D5": "Full credit requires correct Keplerian orbital-radius reasoning, Eddington luminosity comparison, units, assumptions, interpretation, and caveats.",
+  "D6": "Full credit requires plausible, evidence-grounded, non-trivial hypotheses, explicit weaknesses, and falsifiable predictions.",
+  "D7": "Full credit requires cross-modal explanation of 4-day X-ray/optical periodicity, synchronization reasoning, plausible physical inference, quantification, and caveats."
+}

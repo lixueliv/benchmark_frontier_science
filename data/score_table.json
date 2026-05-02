@@ -1,0 +1,67 @@
+{
+  "models": [
+    "ChatGPT 5.3",
+    "ChatGPT 5.5",
+    "Gemini 3",
+    "Sonnet 4.6"
+  ],
+  "dimensions": [
+    "D1 Literature Discovery",
+    "D2 Literature Synthesis",
+    "D3 Claim Verification",
+    "D4 Hypothesis Discrimination",
+    "D5 Formal Scientific Reasoning",
+    "D6 Hypothesis Generation",
+    "D7 Frontier Open Question"
+  ],
+  "scores_percent": [
+    [
+      60,
+      70,
+      100,
+      80
+    ],
+    [
+      71,
+      75,
+      100,
+      58
+    ],
+    [
+      100,
+      75,
+      100,
+      100
+    ],
+    [
+      100,
+      100,
+      83,
+      83
+    ],
+    [
+      100,
+      100,
+      100,
+      100
+    ],
+    [
+      100,
+      100,
+      88,
+      83
+    ],
+    [
+      92,
+      92,
+      83,
+      100
+    ]
+  ],
+  "total_scores": {
+    "ChatGPT 5.3": 623,
+    "ChatGPT 5.5": 612,
+    "Gemini 3": 654,
+    "Sonnet 4.6": 604
+  }
+}
